@@ -21,4 +21,5 @@ repositories {
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT'
     compileOnly 'me.clip:placeholderapi:2.10.9'
+    compileOnly files('../../dependencies/nms/nms-1.16.5.jar')
 }
