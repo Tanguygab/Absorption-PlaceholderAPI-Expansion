@@ -11,12 +11,16 @@ import java.util.List;
 public final class AbsorptionExpansion extends PlaceholderExpansion {
 
     private Method getAbsorption;
+    private Method getHandle;
 
     public AbsorptionExpansion() {
+        String ver = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
         try {
-            Class<?> entityPlayerClass = Class.forName("net.minecraft.server."+Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]+".EntityPlayer");
+            Class<?> entityPlayerClass = Class.forName("net.minecraft.server."+ver+".EntityPlayer");
+            Class<?> craftPlayerClass = Class.forName("org.bukkit.craftbukkit."+ver+".entity.CraftPlayer");
             getAbsorption = entityPlayerClass.getMethod("getAbsorptionHearts");
-        } catch (Exception e) {}
+            getHandle = craftPlayerClass.getMethod("getHandle");
+        } catch (Exception ignored) {}
     }
 
     @Override
@@ -48,7 +52,7 @@ public final class AbsorptionExpansion extends PlaceholderExpansion {
     }
 
     public float getAbsorption(Player p) {
-        try {return (float) getAbsorption.invoke(p);}
+        try {return (float) getAbsorption.invoke(getHandle.invoke(p));}
         catch (Exception e) {return 0;}
     }
 }
